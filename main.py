@@ -401,17 +401,27 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 @app.route('/calculate', methods=['POST'])
 def calculate():
     try:
-        print("Starting calculation with request data:")
+        print("Starting calculation with request data...")
         data = request.json
         if not data:
             return jsonify({"error": "No JSON data received"}), 400
-            
-        print(f"Received data: {data}")
-        print(f"Data types: {type(data)}")
-        for key, value in data.items():
-            print(f"{key}: {type(value)} = {value}")
+
+        # Log all input data
+        print("Request data:", json.dumps(data, indent=2))
+        
+        # Validate required fields
+        required_fields = ['bragg1', 'dBragg1', 'bragg2', 'dBragg2', 'dgls']
+        missing_fields = [field for field in required_fields if field not in data]
+        if missing_fields:
+            return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
+
+        # Get and validate wavelength parameters
         start_wavelength = float(data.get('start_wavelength', 380))
         end_wavelength = float(data.get('end_wavelength', 1200))
+        if start_wavelength >= end_wavelength:
+            return jsonify({"error": "start_wavelength must be less than end_wavelength"}), 400
+
+        print(f"Wavelength range: {start_wavelength} to {end_wavelength}")
         lam = np.linspace(start_wavelength, end_wavelength, 851)
         theta = float(data.get('theta', 0))
 
@@ -432,15 +442,28 @@ def calculate():
 
 
 
-        # Process Bragg1 and Bragg2 file paths with a check to avoid double prefixing
-        bragg1_files = [
-            os.path.normpath(file if file.startswith(UPLOAD_FOLDER) else os.path.join(UPLOAD_FOLDER, file.replace(" - ", os.sep)))
-            for file in data.get('bragg1', [])
-        ]
-        bragg2_files = [
-            os.path.normpath(file if file.startswith(UPLOAD_FOLDER) else os.path.join(UPLOAD_FOLDER, file.replace(" - ", os.sep)))
-            for file in data.get('bragg2', [])
-        ]
+        # Process and validate Bragg file paths
+        def validate_material_path(file_path):
+            if file_path == "air":
+                return True
+            norm_path = os.path.normpath(file_path if file_path.startswith(UPLOAD_FOLDER) 
+                                       else os.path.join(UPLOAD_FOLDER, file_path.replace(" - ", os.sep)))
+            return os.path.exists(norm_path)
+
+        bragg1_files = []
+        bragg2_files = []
+        
+        for file in data.get('bragg1', []):
+            if not validate_material_path(file):
+                return jsonify({"error": f"Material file not found: {file}"}), 400
+            bragg1_files.append(os.path.normpath(file if file.startswith(UPLOAD_FOLDER) 
+                              else os.path.join(UPLOAD_FOLDER, file.replace(" - ", os.sep))))
+                              
+        for file in data.get('bragg2', []):
+            if not validate_material_path(file):
+                return jsonify({"error": f"Material file not found: {file}"}), 400
+            bragg2_files.append(os.path.normpath(file if file.startswith(UPLOAD_FOLDER) 
+                              else os.path.join(UPLOAD_FOLDER, file.replace(" - ", os.sep))))
 
         # Construct materials list, handling "air" and GLS_NEW.csv as special cases
         materials = ["air"] + bragg1_files + [GLS_FILE_PATH] + bragg2_files + ["air"]

@@ -5,7 +5,7 @@ from io import BytesIO
 import os
 import pandas as pd
 from set_stack import set_stack
-import ATR1D
+from ATR1D import ATR1D
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from get_electric import get_electric

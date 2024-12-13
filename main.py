@@ -401,7 +401,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 @app.route('/calculate', methods=['POST'])
 def calculate():
     try:
+        # Log incoming request data
+        print("Starting calculation with request data:")
         data = request.json
+        print(f"Received data: {data}")
         start_wavelength = float(data.get('start_wavelength', 380))
         end_wavelength = float(data.get('end_wavelength', 1200))
         lam = np.linspace(start_wavelength, end_wavelength, 851)
@@ -479,8 +482,11 @@ def calculate():
         }
         return jsonify(response)
     except Exception as e:
-        print(f"Error during calculation: {str(e)}")  # Log exception for debugging
-        return jsonify({"error": str(e)}), 500
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"Error during calculation: {str(e)}")
+        print(f"Traceback: {error_trace}")
+        return jsonify({"error": str(e), "traceback": error_trace}), 500
 
 
 

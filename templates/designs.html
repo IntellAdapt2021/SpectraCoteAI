@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Designs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        .design {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .design h3 {
+            margin: 0 0 10px 0;
+        }
+        .design-details {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Public Designs</h1>
+    <div id="designs-container"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/get_public_designs')
+            .then(response => response.json())
+            .then(data => {
+                const designsContainer = document.getElementById('designs-container');
+                designsContainer.innerHTML = ''; // Clear any existing content
+
+                if (data.designs && data.designs.length > 0) {
+                    data.designs.forEach(design => {
+                        const designElement = document.createElement('div');
+                        designElement.className = 'design';
+                        designElement.innerHTML = `
+                            <h3>${design.name}</h3>
+                            <p>Email: ${design.email}</p>
+                            <button onclick="toggleDetails(this)">View Details</button>
+                            <div class="design-details">
+                                <p>Front Materials: ${design.design.frontMaterials.join(', ')}</p>
+                                <p>Back Materials: ${design.design.backMaterials.join(', ')}</p>
+                                <p>Glass Thickness: ${design.design.glassThickness} nm</p>
+                                <p>Start Wavelength: ${design.design.startWavelength} nm</p>
+                                <p>End Wavelength: ${design.design.endWavelength} nm</p>
+                                <p>Incoherence: ${design.design.incoh}</p>
+                                <p>Angle: ${design.design.theta}</p>
+                            </div>
+                        `;
+                        designsContainer.appendChild(designElement);
+                    });
+                } else {
+                    designsContainer.innerHTML = '<p>No public designs found.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching public designs:', error);
+                alert('Error fetching public designs: ' + error.message);
+            });
+    });
+
+    function toggleDetails(button) {
+        const details = button.nextElementSibling;
+        if (details.style.display === 'none' || details.style.display === '') {
+            details.style.display = 'block';
+            button.textContent = 'Hide Details';
+        } else {
+            details.style.display = 'none';
+            button.textContent = 'View Details';
+        }
+    }
+    </script>
+</body>
+</html>

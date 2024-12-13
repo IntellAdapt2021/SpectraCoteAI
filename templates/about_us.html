@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About AWI AI Coating Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Styles */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #1B263B;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow: auto;
+        }
+
+        .close-button {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #fff;
+            float: right;
+        }
+    </style>
+</head>
+<body class="bg-[#1B263B] text-white font-sans p-10">
+
+    <!-- Header Section -->
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-bold mb-4">AWI AI Coating Tool</h1>
+        <p class="text-lg fade-in">Explore the cutting-edge features of our optical coating design software.</p>
+    </header>
+
+    <!-- Features Section -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature Card Template -->
+        <div class="feature-card bg-blue-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('refractive-index')">
+            <h2 class="text-2xl font-semibold mb-4">🌐 Access to Refractive Index Data</h2>
+            <p>Integrate materials from the Refractive Index Database for comprehensive n and k data.</p>
+        </div>
+
+        <div class="feature-card bg-green-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('add-material')">
+            <h2 class="text-2xl font-semibold mb-4">➕ Add New Materials</h2>
+            <p>Upload your own material data using CSV files and expand the software’s database.</p>
+        </div>
+
+        <div class="feature-card bg-purple-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('tra-conversion')">
+            <h2 class="text-2xl font-semibold mb-4">🔄 TRA to n and k Conversion</h2>
+            <p>Convert TRA data into refractive index values for detailed material analysis.</p>
+        </div>
+
+        <div class="feature-card bg-red-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('interactive-visualization')">
+            <h2 class="text-2xl font-semibold mb-4">🖥️ Interactive Visualization</h2>
+            <p>Explore optical properties with real-time adjustments in an interactive environment.</p>
+        </div>
+
+        <div class="feature-card bg-yellow-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('stack-design')">
+            <h2 class="text-2xl font-semibold mb-4">🛠️ Custom Stack Design</h2>
+            <p>Design multilayer stacks with customizable materials and thicknesses.</p>
+        </div>
+
+        <div class="feature-card bg-indigo-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('export-options')">
+            <h2 class="text-2xl font-semibold mb-4">💾 Export and Save Options</h2>
+            <p>Save and export your designs in various formats including CSV, PDF, and JPEG.</p>
+        </div>
+
+        <div class="feature-card bg-teal-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('real-time-simulation')">
+            <h2 class="text-2xl font-semibold mb-4">⚡ Real-Time Simulation</h2>
+            <p>Experience real-time simulations of optical properties with instant feedback.</p>
+        </div>
+
+        <div class="feature-card bg-pink-800 rounded-lg p-6 cursor-pointer fade-in" onclick="showModal('material-preview')">
+            <h2 class="text-2xl font-semibold mb-4">🔍 Extensive Material Preview</h2>
+            <p>Preview material properties before adding them to your design for optimal selection.</p>
+        </div>
+    </section>
+
+    <!-- Modal Structure -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <img id="modal-image" src="" alt="Feature Screenshot" class="w-full rounded-lg">
+        </div>
+    </div>
+
+    <script>
+        // Function to show the modal with the correct image
+        function showModal(feature) {
+            const imageMap = {
+                'refractive-index': '/static/images/refractive_index.png',
+                'add-material': '/static/images/add_material.png',
+                'tra-conversion': '/static/images/tra_conversion.png',
+                'interactive-visualization': '/static/images/interactive_visualization.png',
+                'stack-design': '/static/images/stack_design.png',
+                'export-options': '/static/images/export_options.png',
+                'real-time-simulation': '/static/images/real_time_simulation.png',
+                'material-preview': '/static/images/material_preview.png'
+            };
+
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modal-image');
+
+            // Set the image source based on the feature clicked
+            modalImage.src = imageMap[feature];
+            modal.style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

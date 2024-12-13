@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AW SpectraCoat™ Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.17/jspdf.plugin.autotable.min.js"></script>
+    <style>
+      /* General Body Styles */
+/* General Body Styles */
+body {
+    display: flex;
+    min-height: 100vh;
+    color: #080808;
+    background-color: #1B263B; /* Dark Blue Background */
+    margin: 0;
+    font-family: 'Amiko', sans-serif; 
+}
+#simulationModal {
+    z-index: 1000; /* Ensure it is above other elements */
+    overflow-y: auto;
+}
+.form-section {
+    flex: 1;
+    padding: 3rem;
+    position: relative; /* Required for layering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1; /* Ensure this section is above the background */
+    color: #ffffff; /* Ensure text is visible */
+}
+
+.form-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/images/TRA.png'); /* Set the background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(4px); /* Blur the background */
+    z-index: -1; /* Push it behind the content */
+    opacity: 0.5; /* Add some transparency if needed */
+}
+
+.form-section > * {
+    position: relative; /* Keep the content above the blurred background */
+    z-index: 2; /* Ensure form elements are on top */
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 3rem 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000000; /* Black Navbar */
+    color: #ffffff;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a,
+.navbar button {
+    color: #ffffff;
+    margin-left: 1rem;
+    margin-right: 1.5rem;
+    text-decoration: none;
+    vertical-align: middle;
+    font-size: 1.1rem;
+    border: none; /* No borders for buttons */
+    cursor: pointer; /* Ensure buttons behave like links */
+}
+
+/* Hover Effect for Navbar Links */
+.navbar a:hover,
+.navbar button:hover {
+    text-decoration: none;
+}
+
+
+
+
+
+
+/* Input Field Styles */
+input {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ffffff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    color: #000; /* Black text color */
+    font-size: 1.1rem;
+}
+
+.i{
+ color: #000;
+}
+
+input:focus {
+    outline: none;
+    background: #ffffff;
+    color: #000;
+}
+
+/* Button Styles */
+.btn-primary {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #e64f4f;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+}
+
+.btn-secondary {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 50%;
+    max-width: 200px;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+    color: #0A2540;
+}
+
+.btn-primary:hover {
+    background: #e0e0e0;
+    color: #0A2540;
+}
+
+/* Image Section */
+.image-section {
+    flex: 1;
+    background-image: url('/static/images/IMG_4893.jpeg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Label Styles */
+label {
+    color: #D1F2F2;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.relative {
+    position: relative;
+}
+
+
+/* Show the menu on hover */
+.relative:hover .dropdown-menu {
+    display: block;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #333; /* Dark background for the dropdown */
+    color: #fff; /* White text color */
+    padding: 0.5rem 0; /* Add vertical padding only */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px; /* Set a minimum width for the dropdown */
+}
+
+/* Dropdown Menu Button Styles */
+.dropdown-menu button {
+    display: block;
+    width: 100%; /* Ensure buttons take full width of the dropdown */
+    padding: 0.5rem 1rem; /* Adjust padding for better alignment */
+    text-align: left; /* Align text to the left */
+    background: transparent; /* Remove background for consistency */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+
+/* Hover Effect for Menu Items */
+.dropdown-menu button:hover {
+    background-color: #555; /* Slightly lighter background */
+}
+
+
+/* Dropdown Button Styles */
+.navbar .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Navbar Button Styling */
+.navbar button {
+    background: none; /* No background for dropdown toggle */
+    color: #fff; /* Ensure white text */
+    border: none;
+    cursor: pointer;
+}
+
+/* Material Select and Input Styles */
+.material-select,
+.thickness-input {
+    color: #ffffff;
+    background-color: #0A2540;
+    border: 1px solid #ffffff;
+}
+
+/* Center Form Content */
+.max-w-4xl {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Layer Input Row */
+.layer-input-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Stack Section Styling */
+#stackSection {
+    background-color: #1B263B; /* Darker Blue for contrast */
+    border: 1px solid #cf4040;
+    color: #ffffff;
+    max-height: 100vh;
+    overflow-y: auto;
+    border-radius: 10px;
+    width:400px;
+}
+
+/* Button Styling */
+#createStackButton {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #e44d4d;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#createStackButton:hover {
+    background-color: #e0e0e0;
+    color: #0A2540;
+}
+
+/* Stack Container Styling */
+#stackContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.layer-box {
+    color: #333333; /* Dark gray color for better visibility */
+    /* Other styles */
+}
+
+.main-container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between the form and stack */
+    align-items: flex-start; /* Align items at the start */
+    padding: 20px; /* Add some padding */
+}
+
+.form-section {
+    flex: 1; /* Allow the form section to take available space */
+    margin-right: 20px; /* Add some space between the form and stack */
+    background-color:#1B263B;
+}
+
+.stack-section {
+    width: 300px; /* Set a fixed width for the stack section */
+    /* You can adjust the width as needed */
+    background-color: #f0f0f0; /* Optional: Add a background color for visibility */
+    padding: 10px; /* Optional: Add some padding */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
+    background-color: #0A2540;
+}
+/* styles.css */
+
+
+/* Graphs inside the graph section */
+#combinedGraph, #transmittanceGraph, #reflectanceGraph {
+    width: 100%;
+    height: 400px; /* Set a fixed height for the graphs */
+}
+
+#savedDesignsModal {
+    display: none;
+    z-index: 1000;
+}
+
+#savedDesignsModal.hidden {
+    display: none;
+}
+
+#savedDesignsModal:not(.hidden) {
+    display: flex;
+}
+
+#designsList {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+#designsList div:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.bg-black {
+    background-color: black;
+}
+
+.bg-opacity-50 {
+    background-opacity: 0.5;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+.max-w-3xl {
+    max-width: 768px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.max-h-96 {
+    max-height: 24rem;
+}
+
+
+    </style>
+</head>
+<body class=" p-8">
+    <!-- Navbar -->
+    <nav class="navbar flex items-center justify-between px-4 py-2 bg-black text-white">
+        <div class="flex space-x-4">
+            <a href="https://adaptivewaves.com/" target="_blank">
+                <img src="https://adaptivewaves.com/wp-content/uploads/2024/03/aw-logo.svg" alt="AW Logo" class="h-8 w-auto">
+            </a>
+
+            <a href="/welcome">Home</a>
+    
+            <!-- Load Dropdown -->
+            <div class="relative dropdown">
+                <button>Load </button>
+                <div class="dropdown-menu">
+                    <button onclick="openDesign()">Open Design</button>
+                    <button onclick="document.getElementById('materialFileInput').click();">Load Material</button>
+                </div>
+            </div>
+    
+            <!-- Save Button -->
+            <button onclick="saveDesign()">Save</button>
+    
+            <!-- Downloads Dropdown -->
+            <div class="relative dropdown">
+                <button>Downloads </button>
+                <div class="dropdown-menu">
+                    <button onclick="downloadGraph()">Graph (JPEG)</button>
+                    <button onclick="downloadCSV()">Data (CSV)</button>
+                    <button onclick="downloadPDF()">Data (PDF)</button>
+                    <button onclick="downloadDesignJSON()">Design (JSON)</button>
+                </div>
+            </div>
+    
+            <!-- Results Dropdown -->
+            <div class="relative dropdown">
+                <button>Results </button>
+                <div class="dropdown-menu">
+                    <button onclick="showTransmittance()">Show Transmittance</button>
+                    <button onclick="showReflectance()">Show Reflectance</button>
+                </div>
+            </div>
+    
+            <a href="/public_designs">All Designs</a>
+            <a href="/help">Help</a>
+        </div>
+    
+        <div class="flex space-x-4">
+            <span>Welcome, {{ first_name }}!</span>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+
+<!-- Designs Modal -->
+<!-- Select Design Modal -->
+<div id="designsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-3xl w-full">
+        <h2 class="text-xl font-bold mb-4">Select a Design</h2>
+        <div id="designsModalContent" class="overflow-y-auto max-h-96">
+            <!-- List of designs will be dynamically added here -->
+        </div>
+        <div class="flex justify-end mt-4">
+            <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" onclick="closeModal('designsModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Design Details Modal -->
+<div id="designDetailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-3xl w-full">
+        <div id="designDetails" class="overflow-y-auto max-h-96">
+            <!-- Design details will be dynamically added here -->
+        </div>
+        <div class="flex justify-end mt-4">
+            <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" onclick="closeModal('designDetailsModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <!-- Hidden File Input for Open Functionality -->
+    <input type="file" id="uploadDesignInput" class="hidden" accept=".json" />
+    <input type="file" id="materialFileInput" accept=".csv" class="hidden" onchange="uploadMaterial()" />
+
+
+    <!-- Main Content -->
+    
+    <div class="form-section p-8">
+        <h1 class="text-2xl font-bold mb-6 text-white">AW SpectraCoat™ Studio</h1>
+    
+        <!-- Input for Design Name -->
+        <div class="mb-4">
+            <label for="filenameInput" class="block text-sm font-medium text-white">Design Name:</label>
+            <input type="text" id="filenameInput" placeholder="Enter design name" class="mt-1 block w-full rounded-md bg-white text-black shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+        </div>
+    
+        <div class="mb-6">
+            <span class="block text-sm font-medium text-white mb-2">Visibility:</span>
+            <div class="flex items-center space-x-4">
+                <label class="flex items-center text-white">
+                    <input type="radio" name="visibility" value="public" class="mr-2" checked>
+                    Public
+                </label>
+                <label class="flex items-center text-white">
+                    <input type="radio" name="visibility" value="private" class="mr-2">
+                    Private
+                </label>
+            </div>
+        </div>
+        
+    
+
+            <!-- Wavelength and other environment inputs -->
+            <div class="grid grid-cols-2 gap-6 mbss-6">
+                <div class="mb-4">
+                    <label for="start_wavelength" class="block text-sm font-medium text-white-800" style="font-weight: bold;">Start Wavelength (nm):</label>
+                    <input class="i" stype="number" id="start_wavelength" value="{{ start_wavelength }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+                <div class="mb-4">
+                    <label for="end_wavelength" class="block text-sm font-medium text-white-800" style="font-weight: bold;">End Wavelength (nm):</label>
+                    <input class="i" type="number" id="end_wavelength" value="{{ end_wavelength }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+                <div class="mb-4">
+                    <label for="theta" class="block text-sm font-medium text-white-700" style="font-weight: bold;">Theta (degrees):</label>
+                    <input class="i" type="number"  id="theta" name="theta" value="{{ theta }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+                <div class="mb-4">
+                    <label for="incoh" class="block text-sm font-medium text-black-700" style="font-weight: bold;">Incoherence:</label>
+                    <input class="i" type="number" id="incoh" value="{{ incoh }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h2 class="text-lg font-semibold mb-2 text-primary">Front Layers</h2>
+                    <div id="frontLayers"></div>
+                    <button id="addFrontLayer" class="mt-2 px-4 py-2 btn-primary rounded">Add Front Layer</button>
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold mb-2 text-primary">Back Layers</h2>
+                    <div id="backLayers"></div>
+                    <button id="addBackLayer" class="mt-2 px-4 py-2 btn-primary rounded">Add Back Layer</button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="dgls" class="block text-sm font-medium text-white-700" style="font-weight: bold;">Glass Thickness (nm):</label>
+                <input class="i"type="number" id="dgls" name="glass_thickness" value="{{ glass_thickness }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <button id="calculateButton" class="btn-primary text-white font-bold py-2 px-4 rounded" onclick="calculate()">Calculate</button>
+                <button id="interactiveSimulationButton" class="btn-primary text-white font-bold py-2 px-4 rounded" onclick="openSimulation()">Interactive Simulation</button>
+            </div>
+
+            <!-- Graph Section -->
+            <div id="graphSection" class="mt-6">
+                <div id="combinedGraph" class="mt-6"></div>
+                <div id="transmittanceGraph" class="mt-6" style="display: none;"></div>
+                <div id="reflectanceGraph" class="mt-6" style="display: none;"></div>
+            </div>
+    
+</div>
+           <!-- Main Content Layout -->
+<div class="flex flex-row gap-6 mt-6">
+    
+
+    <!-- Right Side: Stack Visualization Section -->
+    <div id="stackSection" class="w-1/2 p-4 rounded-lg shadow-lg bg-[#1B263B]">
+        <button id="createStackButton" class="btn-primary mb-4 w-full">Create Stack</button>
+        <h2 class="text-xl font-bold mb-4 text-center text-white">Stack Design Visualization</h2>
+        <div id="stackContainer" class="flex flex-col items-center"></div>
+    </div>
+</div>
+
+
+           
+
+            <!-- Graphical representation -->
+            <div id="layerDesign" class="mt-10"></div>
+            
+<!-- Modal for Interactive Simulation -->
+<div id="simulationModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg p-6 max-w-2xl w-full" style="max-height: 90vh; overflow-y: auto;">
+        <h2 class="text-xl font-bold mb-4">Interactive Thickness Adjustment</h2>
+        
+        <!-- Scrollable Material List -->
+        <div id="thicknessControls" class="border border-gray-300 rounded-lg p-4 bg-gray-100" style="max-height: 300px; overflow-y: auto;">
+            <!-- Material controls will be dynamically injected here -->
+        </div>
+
+        <!-- Embedded Graph in Modal -->
+        <div id="interactiveGraph" class="mb-6" style="height: 400px;"></div>
+        
+        <div class="flex justify-end mt-4">
+            <button id="applyChangesButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Apply Changes</button>
+            <button id="resetChangesButton" class="px-4 py-2 bg-gray-500 text-white rounded ml-2 hover:bg-gray-600">Reset</button>
+            <button id="closeModalButton" class="px-4 py-2 bg-red-500 text-white rounded ml-2 hover:bg-red-600">Close</button>
+        </div>
+    </div>
+</div>
+
+            
+
+            <!-- Jsc Display -->
+            <div id="jscDisplay" class="mt-6 text-lg font-semibold text-primary"></div>
+
+
+
+
+        </div>
+    
+            <div id="image-section"></div>
+        
+
+    <script>
+document.querySelectorAll('.dropdown').forEach((dropdown) => {
+    const button = dropdown.querySelector('button');
+    const menu = dropdown.querySelector('.dropdown-menu');
+
+    let timeout; // To manage hiding with a delay
+
+    // Show the menu
+    const showMenu = () => {
+        clearTimeout(timeout); // Clear any pending hide timeout
+        menu.classList.remove('hidden');
+    };
+
+    // Hide the menu
+    const hideMenu = () => {
+        timeout = setTimeout(() => {
+            menu.classList.add('hidden');
+        }, 200); // Delay for smoother interaction
+    };
+
+    // Show menu when button is hovered
+    button.addEventListener('mouseover', showMenu);
+
+    // Keep menu open when hovering over the menu itself
+    menu.addEventListener('mouseover', showMenu);
+
+    // Hide menu when leaving the button or menu
+    button.addEventListener('mouseout', hideMenu);
+    menu.addEventListener('mouseout', hideMenu);
+});
+
+
+// Variables to store original thickness values
+let originalFrontThicknesses = [];
+let originalBackThicknesses = [];
+let updatedFrontThicknesses = [];
+let updatedBackThicknesses = [];
+
+// Open the Interactive Simulation modal
+document.getElementById('interactiveSimulationButton').addEventListener('click', () => {
+    initializeThicknessControls();
+    document.getElementById('simulationModal').classList.remove('hidden');
+});
+
+// Close the modal
+document.getElementById('closeModalButton').addEventListener('click', () => {
+    document.getElementById('simulationModal').classList.add('hidden');
+});
+
+// Reset changes
+document.getElementById('resetChangesButton').addEventListener('click', () => {
+    initializeThicknessControls();
+    updateGraph(originalFrontThicknesses, originalBackThicknesses);
+});
+
+// Apply changes
+document.getElementById('applyChangesButton').addEventListener('click', () => {
+    // Get the current front and back layer data (materials and thicknesses)
+    const frontLayers = getLayerData('frontLayers');
+    const backLayers = getLayerData('backLayers');
+
+    // Preserve the original material names
+    const preservedFrontMaterials = [...frontLayers.materials];
+    const preservedBackMaterials = [...backLayers.materials];
+
+    // Update only the thickness values in the main design
+    frontLayers.thicknesses = [...updatedFrontThicknesses];
+    backLayers.thicknesses = [...updatedBackThicknesses];
+
+    // Update the UI thickness inputs without altering the material dropdowns
+    Array.from(document.querySelectorAll('#frontLayers .thickness-input')).forEach((input, index) => {
+        input.value = updatedFrontThicknesses[index];
+    });
+
+    Array.from(document.querySelectorAll('#backLayers .thickness-input')).forEach((input, index) => {
+        input.value = updatedBackThicknesses[index];
+    });
+
+    // Ensure the material dropdown selections remain unchanged
+    Array.from(document.querySelectorAll('#frontLayers .material-select')).forEach((select, index) => {
+        select.value = preservedFrontMaterials[index];
+    });
+
+    Array.from(document.querySelectorAll('#backLayers .material-select')).forEach((select, index) => {
+        select.value = preservedBackMaterials[index];
+    });
+
+    // Close the modal
+    document.getElementById('simulationModal').classList.add('hidden');
+
+    // Notify the user
+    alert('Changes have been successfully applied to the design without affecting material selections.');
+});
+
+// Event listener for the "Create Stack" button
+// Event listener for the Create Stack button
+document.getElementById('createStackButton').addEventListener('click', () => {
+    const frontLayers = getLayerData('frontLayers');
+    const backLayers = getLayerData('backLayers');
+    const glassThickness = parseFloat(document.getElementById('dgls').value);
+
+    updateLayerDesign(frontLayers.materials, frontLayers.thicknesses, backLayers.materials, backLayers.thicknesses, glassThickness);
+    document.getElementById('stackSection').style.display = 'block'; // Ensure the stack section is visible
+});
+
+function openDesign() {
+    fetch('/get_user_designs')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const modalContent = document.getElementById('designsModalContent');
+            modalContent.innerHTML = ''; // Clear previous content
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            if (data.designs && data.designs.length > 0) {
+                data.designs.forEach(design => {
+                    const designDiv = document.createElement('div');
+                    designDiv.className = 'design-item flex items-center justify-between p-2 border-b border-gray-300';
+
+                    const designName = document.createElement('span');
+                    designName.textContent = design.name;
+                    designName.className = 'design-name font-medium';
+
+                    const viewButton = document.createElement('button');
+                    viewButton.textContent = 'View';
+                    viewButton.className = 'btn-secondary px-2 py-1 rounded';
+                    viewButton.addEventListener('click', () => {
+                        showDesignDetails(design);
+                    });
+
+                    const loadButton = document.createElement('button');
+                    loadButton.textContent = 'Load';
+                    loadButton.className = 'btn-secondary px-2 py-1 rounded ml-2';
+                    loadButton.addEventListener('click', () => {
+                        applyDesign(design.details);
+                        closeModal('designsModal');
+                    });
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'btn-secondary px-1 py-1 rounded ml-2 bg-red-500 text-white';
+                    deleteButton.addEventListener('click', () => {
+                        if (confirm(`Are you sure you want to delete the design "${design.name}"?`)) {
+                            deleteDesign(design.name);
+                        }
+                    });
+
+                    designDiv.appendChild(designName);
+                    designDiv.appendChild(viewButton);
+                    designDiv.appendChild(loadButton);
+                    designDiv.appendChild(deleteButton);
+
+                    modalContent.appendChild(designDiv);
+                });
+            } else {
+                modalContent.innerHTML = '<p class="text-gray-500 text-center">No designs found.</p>';
+            }
+
+            document.getElementById('designsModal').classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error fetching designs:', error);
+            alert('Error fetching designs: ' + error.message);
+        });
+}
+
+function deleteDesign(designName) {
+    console.log(`Sending delete request for: ${designName}`); // Debugging log
+
+    fetch('/delete_design', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: designName })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(result => {
+            if (result.success) {
+                alert('Design deleted successfully.');
+                openDesign(); // Refresh the design list
+            } else {
+                alert('Error deleting design: ' + result.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting design:', error);
+            alert('Error deleting design: ' + error.message);
+        });
+}
+
+
+
+
+function showDesignDetails(design) {
+    const detailsSection = document.getElementById('designDetails');
+    const details = design.details || {}; // Handle cases where details might be missing
+    detailsSection.innerHTML = `
+        <h3 class="text-xl font-bold mb-4">Design Details</h3>
+        <p><strong>Name:</strong> ${design.name || 'Unnamed'}</p>
+        <p><strong>Visibility:</strong> ${details.visibility || 'Not specified'}</p>
+        <p><strong>Front Materials:</strong> ${details.frontMaterials ? details.frontMaterials.join(', ') : 'N/A'}</p>
+        <p><strong>Front Thicknesses:</strong> ${details.frontThicknesses ? details.frontThicknesses.join(', ') : 'N/A'} nm</p>
+        <p><strong>Back Materials:</strong> ${details.backMaterials ? details.backMaterials.join(', ') : 'N/A'}</p>
+        <p><strong>Back Thicknesses:</strong> ${details.backThicknesses ? details.backThicknesses.join(', ') : 'N/A'} nm</p>
+        <p><strong>Glass Thickness:</strong> ${details.glassThickness || 'N/A'} nm</p>
+        <p><strong>Start Wavelength:</strong> ${details.startWavelength || 'N/A'} nm</p>
+        <p><strong>End Wavelength:</strong> ${details.endWavelength || 'N/A'} nm</p>
+        <p><strong>Theta:</strong> ${details.theta || 'N/A'} degrees</p>
+        <p><strong>Incoherence:</strong> ${details.incoh || 'N/A'}</p>
+    `;
+
+    // Show the design details section
+    document.getElementById('designDetailsModal').classList.remove('hidden');
+}
+
+
+
+
+// Function to populate fields with design data
+function populateFields(design) {
+    document.getElementById('filenameInput').value = design.name || '';
+    document.getElementById('start_wavelength').value = design.startWavelength || '';
+    document.getElementById('end_wavelength').value = design.endWavelength || '';
+    document.getElementById('theta').value = design.theta !== undefined ? design.theta : ''; // Ensure theta is set
+    document.getElementById('incoh').value = design.incoh || '';
+    document.getElementById('dgls').value = design.glassThickness || '';
+
+    // Populate front layers
+    const frontLayersContainer = document.getElementById('frontLayers');
+    frontLayersContainer.innerHTML = ''; // Clear existing layers
+    design.frontMaterials.forEach((material, index) => {
+        frontLayersContainer.appendChild(createLayerInput(material, design.frontThicknesses[index]));
+    });
+
+    // Populate back layers
+    const backLayersContainer = document.getElementById('backLayers');
+    backLayersContainer.innerHTML = ''; // Clear existing layers
+    design.backMaterials.forEach((material, index) => {
+        backLayersContainer.appendChild(createLayerInput(material, design.backThicknesses[index]));
+    });
+}
+
+// Function to close the modal
+function closeModal(modalId = null) {
+    if (modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    } else {
+        // Close all modals
+        document.getElementById('designsModal').classList.add('hidden');
+        document.getElementById('designDetailsModal').classList.add('hidden');
+    }
+}
+
+
+
+// Function to create the stack visualization
+function createStackDesign() {
+    const frontLayers = getLayerData('frontLayers');
+    const backLayers = getLayerData('backLayers');
+    const dgls = parseFloat(document.getElementById('dgls').value);
+
+    const stackVisualizationSection = document.getElementById('stackVisualizationSection');
+    stackVisualizationSection.innerHTML = ''; // Clear existing content
+    stackVisualizationSection.style.display = 'block'; // Make sure it's visible
+
+    // Create a stack container
+    const stackContainer = document.createElement('div');
+    stackContainer.id = 'stackContainer';
+    stackContainer.className = 'flex flex-col items-center';
+    stackVisualizationSection.appendChild(stackContainer);
+
+    console.log("Creating stack visualization...");
+
+    // Call the function to update the stack design
+    updateLayerDesign(frontLayers.materials, frontLayers.thicknesses, backLayers.materials, backLayers.thicknesses, dgls);
+
+    console.log("Stack visualization completed.");
+}
+
+// Material color mapping
+const materialColors = {};
+
+// Helper function to generate a random color
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+// Function to get or assign a color for a material
+function getMaterialColor(material, usedColors) {
+    // If the material already has a color, use it
+    if (materialColors[material]) {
+        return materialColors[material];
+    }
+
+    // Generate a new color and ensure it is unique in the current design
+    let color;
+    do {
+        color = getRandomColor();
+    } while (usedColors.has(color));
+
+    // Assign the generated color to the material and mark it as used
+    materialColors[material] = color;
+    usedColors.add(color);
+
+    return color;
+}
+
+// Function to update the stack design visualization with colors
+function updateLayerDesign(frontMaterials, frontThicknesses, backMaterials, backThicknesses, dgls) {
+    const container = document.getElementById('stackContainer');
+    if (!container) {
+        console.error("Stack container not found!");
+        return;
+    }
+
+    container.innerHTML = ''; // Clear existing content
+
+    const layerHeight = 30;
+    const glassHeight = 20;
+    const layerWidth = '200px'; // Fixed width for layer boxes
+
+    function createLayerBox(material, thickness) {
+        const layerContainer = document.createElement('div');
+        layerContainer.style.display = 'flex'; // Use flexbox for layout
+        layerContainer.style.alignItems = 'center'; // Center align items vertically
+        layerContainer.style.margin = '2px 0'; // Vertical margin for spacing
+        layerContainer.style.width = '100%'; // Full width for the container
+
+        const layerDiv = document.createElement('div');
+        layerDiv.className = 'layer-box';
+        layerDiv.style.backgroundColor = getRandomColor(); // Use a random color for each layer
+        layerDiv.style.height = `${thickness}px`;
+        layerDiv.style.width = layerWidth; // Set fixed width for alignment
+
+        // Create a span for material info
+        const materialInfo = document.createElement('span');
+        materialInfo.style.marginLeft = '10px'; // Add some space between the layer and the text
+        materialInfo.style.color = '#FFFFFF'; // Change text color to white for better visibility
+        materialInfo.style.flexGrow = '1'; // Allow the text to take up remaining space
+        materialInfo.style.textAlign = 'right'; // Align text to the right
+        materialInfo.textContent = `${material} (${thickness} nm)`; // Material info text
+
+        // Append the layer box and material info to the container
+        layerContainer.appendChild(layerDiv);
+        layerContainer.appendChild(materialInfo);
+
+        return layerContainer; // Return the entire container
+    }
+
+    console.log("Adding front layers with colors...");
+
+    // Add front layers with assigned colors
+    frontMaterials.forEach((material, index) => {
+        const thickness = frontThicknesses[index];
+        container.appendChild(createLayerBox(material, layerHeight));
+    });
+
+    // Add glass layer
+    console.log("Adding glass layer.");
+    container.appendChild(createLayerBox('Glass', glassHeight));
+
+    console.log("Adding back layers with colors...");
+
+    // Add back layers with assigned colors (in reverse order for correct visualization)
+    backMaterials.reverse().forEach((material, index) => {
+        const thickness = backThicknesses[index];
+        container.appendChild(createLayerBox(material, layerHeight));
+    });
+
+    console.log("Layer design with colors updated successfully.");
+}
+
+
+
+function initializeThicknessControls() {
+    const controlsContainer = document.getElementById('thicknessControls');
+    controlsContainer.innerHTML = '';
+
+    // Retrieve original thickness and material data
+    originalFrontThicknesses = getLayerData('frontLayers').thicknesses;
+    originalBackThicknesses = getLayerData('backLayers').thicknesses;
+    updatedFrontThicknesses = [...originalFrontThicknesses];
+    updatedBackThicknesses = [...originalBackThicknesses];
+
+    const frontMaterials = getLayerData('frontLayers').materials;
+    const backMaterials = getLayerData('backLayers').materials;
+
+    // Create sliders for front layers with material names
+    frontMaterials.forEach((material, index) => {
+        const control = createSliderControl(`Front Layer ${index + 1}: ${material}`, originalFrontThicknesses[index], (value) => {
+            updatedFrontThicknesses[index] = parseFloat(value);
+            updateGraph(updatedFrontThicknesses, updatedBackThicknesses);
+        });
+        controlsContainer.appendChild(control);
+    });
+
+    // Create sliders for back layers with material names
+    backMaterials.forEach((material, index) => {
+        const control = createSliderControl(`Back Layer ${index + 1}: ${material}`, originalBackThicknesses[index], (value) => {
+            updatedBackThicknesses[index] = parseFloat(value);
+            updateGraph(updatedFrontThicknesses, updatedBackThicknesses);
+        });
+        controlsContainer.appendChild(control);
+    });
+}
+
+
+// Function to create a slider control
+function createSliderControl(labelText, initialValue, onChangeCallback) {
+    const div = document.createElement('div');
+    div.className = 'mb-4';
+
+    const label = document.createElement('label');
+    label.textContent = `${labelText}: ${initialValue} nm`;
+    label.className = 'block text-sm font-medium text-gray-700 mb-2';
+
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = '1';
+    input.max = '1000';
+    input.value = initialValue;
+    input.className = 'w-full';
+    input.addEventListener('input', (event) => {
+        const value = event.target.value;
+        label.textContent = `${labelText}: ${value} nm`;
+        onChangeCallback(value);
+    });
+
+    div.appendChild(label);
+    div.appendChild(input);
+    return div;
+}
+
+// Update the graph with the new thickness values
+// Update the graph with the new thickness values in the modal
+function updateGraph(frontThicknesses, backThicknesses) {
+    const data = {
+        bragg1: getLayerData('frontLayers').materials,
+        dBragg1: frontThicknesses,
+        bragg2: getLayerData('backLayers').materials,
+        dBragg2: backThicknesses,
+        dgls: parseFloat(document.getElementById('dgls').value),
+        start_wavelength: parseFloat(document.getElementById('start_wavelength').value),
+        end_wavelength: parseFloat(document.getElementById('end_wavelength').value),
+        theta: parseFloat(document.getElementById('theta').value),
+        incoh: parseFloat(document.getElementById('incoh').value),
+    };
+
+    fetch('/calculate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+})
+    .then(response => response.json())
+    .then(result => {
+        // Scale transmittance and reflectance to percentage values
+        const transmittance = result.transmittance.map(value => value * 100);
+        const reflectance = result.reflectance.map(value => value * 100);
+
+        // Create the traces with scaled data
+        const traceT = {
+            x: result.wavelengths,
+            y: transmittance,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Transmittance',
+            line: { color: 'blue' },
+        };
+        const traceR = {
+            x: result.wavelengths,
+            y: reflectance,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Reflectance',
+            line: { color: 'red' },
+        };
+
+        // Update the graph with the new scaled data
+        Plotly.react('interactiveGraph', [traceT, traceR], {
+            title: 'Interactive Analysis: Transmittance and Reflectance',
+            xaxis: { title: 'Wavelength (nm)' },
+            yaxis: { title: 'Percentage (%)', range: [0, 100] },
+        });
+    })
+
+        .catch(error => {
+            console.error('Error updating graph:', error);
+            alert('An error occurred while updating the graph.');
+        });
+}
+
+// Open the Interactive Simulation modal
+document.getElementById('interactiveSimulationButton').addEventListener('click', () => {
+    initializeThicknessControls();
+    updateGraph(updatedFrontThicknesses, updatedBackThicknesses); // Initialize graph in modal
+    document.getElementById('simulationModal').classList.remove('hidden');
+});
+
+
+        function triggerOpenFile() {
+            document.getElementById('uploadDesignInput').click();
+        }
+
+        document.getElementById('uploadDesignInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const design = JSON.parse(e.target.result);
+                    applyDesign(design);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function applyDesign(design) {
+    if (!design || !design.frontMaterials || !design.backMaterials) {
+        console.error("Invalid design data:", design);
+        alert("The design data is invalid. Please check the uploaded file or try again.");
+        return;
+    }
+
+    document.getElementById('start_wavelength').value = parseFloat(design.startWavelength || 380);
+    document.getElementById('end_wavelength').value = parseFloat(design.endWavelength || 1200);
+    document.getElementById('theta').value = design.theta !== undefined ? design.theta : '';
+    document.getElementById('incoh').value = parseFloat(design.incoh || 1000);
+    document.getElementById('dgls').value = parseFloat(design.glassThickness || 320000);
+
+    const frontLayersContainer = document.getElementById('frontLayers');
+    frontLayersContainer.innerHTML = '';
+    (design.frontMaterials || []).forEach((material, index) => {
+        const layerInput = createLayerInput(material, parseFloat(design.frontThicknesses[index] || 0));
+        frontLayersContainer.appendChild(layerInput);
+    });
+
+    const backLayersContainer = document.getElementById('backLayers');
+    backLayersContainer.innerHTML = '';
+    (design.backMaterials || []).forEach((material, index) => {
+        const layerInput = createLayerInput(material, parseFloat(design.backThicknesses[index] || 0));
+        backLayersContainer.appendChild(layerInput);
+    });
+}
+
+
+
+        function loadMaterial() {
+            alert("Load Material functionality is currently under construction.");
+        }
+
+        function saveDesign() {
+    const designName = document.getElementById('filenameInput').value.trim();
+    if (!designName) {
+        alert("Please enter a design name.");
+        return;
+    }
+
+    const visibility = document.querySelector('input[name="visibility"]:checked').value;
+    const frontLayers = getLayerData('frontLayers');
+    const backLayers = getLayerData('backLayers');
+    const glassThickness = parseFloat(document.getElementById('dgls').value);
+    const startWavelength = parseFloat(document.getElementById('start_wavelength').value);
+    const endWavelength = parseFloat(document.getElementById('end_wavelength').value);
+    const theta = parseFloat(document.getElementById('theta').value);
+
+    const designData = {
+        name: designName,
+        visibility: visibility, // Public or Private
+        frontMaterials: frontLayers.materials,
+        frontThicknesses: frontLayers.thicknesses,
+        backMaterials: backLayers.materials,
+        backThicknesses: backLayers.thicknesses,
+        glassThickness: glassThickness,
+        startWavelength: startWavelength,
+        endWavelength: endWavelength,
+        theta: parseFloat(document.getElementById('theta').value),
+        incoh: parseFloat(document.getElementById('incoh').value),
+    };
+
+    fetch('/save_design', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(designData),
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            if (result.success) {
+                alert("Design saved successfully!");
+            } else {
+                alert("Error saving design: " + result.error);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred while saving the design.');
+        });
+
+        console.log("Design applied:", design);
+}
+
+
+        function calculate() {
+            const frontLayers = getLayerData('frontLayers');
+            const backLayers = getLayerData('backLayers');
+            const dgls = parseFloat(document.getElementById('dgls').value);
+
+            const startWavelength = parseFloat(document.getElementById('start_wavelength').value);
+            const endWavelength = parseFloat(document.getElementById('end_wavelength').value);
+            const theta = parseFloat(document.getElementById('theta').value);
+            const incoh = parseFloat(document.getElementById('incoh').value);
+
+            const data = {
+                bragg1: frontLayers.materials,
+                dBragg1: frontLayers.thicknesses,
+                bragg2: backLayers.materials,
+                dBragg2: backLayers.thicknesses,
+                dgls: dgls,
+                start_wavelength: startWavelength,
+                end_wavelength: endWavelength,
+                theta: theta,
+                incoh: incoh
+            };
+
+            fetch('/calculate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => {
+            console.log('Response object:', response); // Log the response object
+            if (!response.ok) {
+                // Log the status for debugging
+                console.error(`Server responded with status: ${response.status}`);
+                throw new Error(`Server error: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(resultData => {
+            console.log('Parsed response:', resultData); // Log parsed JSON response
+            if (resultData.error) {
+                // Handle backend-reported errors
+                alert(`Calculation error: ${resultData.error}`);
+                return;
+            }
+
+        result = resultData;
+
+ // Validate and scale the values
+const transmittance = result.transmittance.map(value => isNaN(value) || !isFinite(value) ? 0 : value * 100);
+const reflectance = result.reflectance.map(value => isNaN(value) || !isFinite(value) ? 0 : value * 100);
+const absorptance = result.absorptance.map(value => isNaN(value) || !isFinite(value) ? 0 : value * 100);
+
+
+// Create traces
+const traceT = {
+    x: result.wavelengths,
+    y: transmittance,
+    type: 'scatter',
+    mode: 'lines',
+    name: 'Transmittance',
+    line: { color: 'blue' }
+};
+const traceR = {
+    x: result.wavelengths,
+    y: reflectance,
+    type: 'scatter',
+    mode: 'lines',
+    name: 'Reflectance',
+    line: { color: 'red' }
+};
+const traceA = {
+    x: result.wavelengths,
+    y: absorptance,
+    type: 'scatter',
+    mode: 'lines',
+    name: 'Absorptance',
+    line: { color: 'green' }
+};
+
+                const combinedData = [traceT, traceR, traceA];
+
+                Plotly.newPlot('combinedGraph', combinedData, {
+                    title: 'Transmittance, Reflectance, and Absorptance vs Wavelength',
+                    xaxis: { title: 'Wavelength (nm)' },
+                    yaxis: { title: 'TRA (%)',
+                        range: [0,100]
+                     }
+                    
+                });
+
+                document.getElementById('graphButtons').style.display = 'flex';
+
+                document.getElementById('showTransmittance').addEventListener('click', function() {
+                    document.getElementById('combinedGraph').style.display = 'none';
+                    document.getElementById('reflectanceGraph').style.display = 'none';
+
+                    Plotly.newPlot('transmittanceGraph', [traceT], {
+                        title: 'Transmittance vs Wavelength',
+                        xaxis: { title: 'Wavelength (nm)' },
+                        yaxis: { title: 'Transmittance (%)',
+                        range: [0,100]
+                     }
+                    });
+                    document.getElementById('transmittanceGraph').style.display = 'block';
+                });
+
+                document.getElementById('showReflectance').addEventListener('click', function() {
+                    document.getElementById('combinedGraph').style.display = 'none';
+                    document.getElementById('transmittanceGraph').style.display = 'none';
+
+                    Plotly.newPlot('reflectanceGraph', [traceR], {
+                        title: 'Reflectance vs Wavelength',
+                        xaxis: { title: 'Wavelength (nm)' },
+                        yaxis: { title: 'Reflectance (%)',
+                        range: [0,100]
+                     }
+                    });
+                    document.getElementById('reflectanceGraph').style.display = 'block';
+                });
+
+                document.getElementById('jscDisplay').textContent = `Short-circuit current density (Jsc): ${result.jsc.toFixed(2)} mA/cm²`;
+
+               // Replace image section with stack design visualization
+        const imageSection = document.getElementById('imageSection');
+        imageSection.innerHTML = ''; // Clear existing content
+
+        // Create the stack design visualization container
+        const stackContainer = document.createElement('div');
+        stackContainer.id = 'stackContainer';
+        stackContainer.className = 'flex flex-col items-center';
+
+        imageSection.appendChild(stackContainer);
+
+        // Update the stack design
+        updateLayerDesign(frontLayers.materials, frontLayers.thicknesses, backLayers.materials, backLayers.thicknesses, dgls);
+
+        console.log("Stack design replaced image section.");
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Calculation successful');
+            });
+        }
+
+        function getLayerData(containerId) {
+    const container = document.getElementById(containerId);
+
+    if (!container) {
+        console.error(`Container with ID '${containerId}' not found.`);
+        return { materials: [], thicknesses: [] }; // Return empty arrays if the container is missing
+    }
+
+    const materials = Array.from(container.querySelectorAll('.material-select')).map(select => select.value || "Unknown Material");
+    const thicknesses = Array.from(container.querySelectorAll('.thickness-input')).map(input => parseFloat(input.value) || 0);
+
+    return { materials, thicknesses };
+}
+
+
+        async function loadMaterials(selectElement = null) {
+    const response = await fetch('/get_materials');
+    const materialsData = await response.json();
+
+    // Prepare options based on materialsData
+    const materialSelectOptions = ['<option value="">Select Material</option>'];
+    for (const folder in materialsData) {
+        materialsData[folder].forEach(material => {
+            materialSelectOptions.push(`<option value="${folder}/${material}">${folder} - ${material}</option>`);
+        });
+    }
+    
+    // Populate the specified select element or all material-select dropdowns
+    if (selectElement) {
+        selectElement.innerHTML = materialSelectOptions.join('');
+    } else {
+        document.querySelectorAll('.material-select').forEach(select => {
+            select.innerHTML = materialSelectOptions.join('');
+        });
+    }
+}
+
+async function uploadMaterial() {
+    const fileInput = document.getElementById('materialFileInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert("Please select a file.");
+        return;
+    }
+
+    // Ensure the file is a CSV
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+        alert("Please upload a CSV file.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        // Send file to server
+        const response = await fetch('/upload_material', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Upload successful!");
+            loadMaterials(); // Refresh dropdown options after successful upload
+        } else {
+            alert(result.error);
+        }
+    } catch (error) {
+        console.error("Upload error:", error);
+        alert("An error occurred while uploading the file.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Parse query parameters
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has('name')) {
+        // Autofill the form fields
+        document.getElementById('filenameInput').value = params.get('name');
+        document.getElementById('start_wavelength').value = params.get('startWavelength');
+        document.getElementById('end_wavelength').value = params.get('endWavelength');
+        document.getElementById('theta').value = params.get('theta');
+        document.getElementById('incoh').value = params.get('incoh');
+        document.getElementById('dgls').value = params.get('glassThickness');
+
+        // Populate front layers
+        const frontMaterials = params.get('frontMaterials').split('|');
+        const frontThicknesses = params.get('frontThicknesses').split(',');
+        const frontContainer = document.getElementById('frontLayers');
+        frontContainer.innerHTML = ''; // Clear existing layers
+        frontMaterials.forEach((material, index) => {
+            const layerDiv = createLayerInput(material, frontThicknesses[index]);
+            frontContainer.appendChild(layerDiv);
+        });
+
+        // Populate back layers
+        const backMaterials = params.get('backMaterials').split('|');
+        const backThicknesses = params.get('backThicknesses').split(',');
+        const backContainer = document.getElementById('backLayers');
+        backContainer.innerHTML = ''; // Clear existing layers
+        backMaterials.forEach((material, index) => {
+            const layerDiv = createLayerInput(material, backThicknesses[index]);
+            backContainer.appendChild(layerDiv);
+        });
+    }
+});
+
+
+    // Preview material data
+    async function previewMaterial(materialPath) {
+    const [folder, material] = materialPath.split('/');
+    let data; // Declare `data` outside the `try` block to ensure it's accessible later
+    try {
+        const response = await fetch(`/preview_material?folder=${folder}&material=${material}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        data = await response.json(); // Assign the JSON response to `data`
+        console.log(data); // Debugging: log the fetched data
+    } catch (error) {
+        console.error('Error fetching material preview:', error);
+        alert('Failed to fetch material preview. Please try again.');
+        return; // Exit the function if an error occurs
+    }
+
+    // Handle the response
+    if (data.preview) {
+        alert(`Preview of ${material}:\n\n${data.preview.join('\n')}`); // Show file preview in an alert
+    } else if (data.error) {
+        alert(`Error loading preview: ${data.error}`);
+    }
+}
+
+
+function createLayerInput(material = '', thickness = 100) {
+    const div = document.createElement('div');
+    div.className = 'flex items-center space-x-4 mb-4 layer-input-row';
+    div.innerHTML = `
+        <div class="flex items-center gap-2 w-full">
+            <select class="material-select flex-1 min-w-[180px] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="">Select Material</option>
+            </select>
+            <input type="number" class="thickness-input w-[100px] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value="${thickness}" step="0.01" placeholder="Thickness (nm)">
+            <button class="preview-layer px-3 py-1 bg-blue-500  rounded hover:bg-blue-600">Preview</button>
+            <button class="remove-layer px-3 py-1 bg-red-500  rounded hover:bg-red-600">Remove</button>
+        </div>
+    `;
+
+    // Populate material options
+    loadMaterials(div.querySelector('.material-select')).then(() => {
+        const select = div.querySelector('.material-select');
+        select.value = material; // Set the selected material
+    });
+
+    // Add event listeners for buttons
+    div.querySelector('.preview-layer').addEventListener('click', () => {
+        const selectedMaterial = div.querySelector('.material-select').value;
+        if (selectedMaterial) {
+            previewMaterial(selectedMaterial);
+        } else {
+            alert("Please select a material to preview.");
+        }
+    });
+
+    div.querySelector('.remove-layer').addEventListener('click', () => div.remove());
+
+    return div;
+}
+
+
+
+        // Event listener to add front and back layers
+    document.getElementById('addFrontLayer').addEventListener('click', () => {
+        document.getElementById('frontLayers').appendChild(createLayerInput());
+    });
+
+    document.getElementById('addBackLayer').addEventListener('click', () => {
+        document.getElementById('backLayers').appendChild(createLayerInput());
+    });
+
+    // Load materials on page load
+    document.addEventListener('DOMContentLoaded', loadMaterials);
+
+    function downloadGraph() {
+    console.log("Downloading Graph as JPEG...");
+    Plotly.toImage(document.getElementById('combinedGraph'), { format: 'jpeg', width: 800, height: 600 })
+        .then(function(dataUrl) {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = 'graph.jpeg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch(error => {
+            console.error('Error downloading graph:', error);
+            alert('An error occurred while downloading the graph.');
+        });
+}
+
+function downloadCSV() {
+    console.log("Downloading Data as CSV...");
+
+    if (!result || !result.wavelengths) {
+        alert('No data available to download.');
+        return;
+    }
+
+    let csvContent = 'Wavelength (nm),Transmittance (%),Reflectance (%),Absorptance (%)\n';
+    for (let i = 0; i < result.wavelengths.length; i++) {
+        // Scale the values by 100 to convert to percentage
+        const transmittance = result.transmittance[i] * 100;
+        const reflectance = result.reflectance[i] * 100;
+        const absorptance = result.absorptance[i] * 100;
+
+        csvContent += `${result.wavelengths[i]},${transmittance},${reflectance},${absorptance}\n`;
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'data.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function downloadPDF() {
+    console.log("Downloading Data as PDF...");
+
+    if (!result || !result.wavelengths) {
+        alert('No data available to download.');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text('Optical Simulation Data', 14, 10);
+
+    // Prepare table data with values scaled by 100
+    const tableData = result.wavelengths.map((wavelength, index) => [
+        wavelength,
+        (result.transmittance[index] * 100).toFixed(2),
+        (result.reflectance[index] * 100).toFixed(2),
+        (result.absorptance[index] * 100).toFixed(2),
+    ]);
+
+    doc.autoTable({
+        head: [['Wavelength (nm)', 'Transmittance (%)', 'Reflectance (%)', 'Absorptance (%)']],
+        body: tableData,
+    });
+
+    doc.save('data.pdf');
+}
+
+
+function showTransmittance() {
+    console.log("Showing Transmittance Graph...");
+    document.getElementById('combinedGraph').style.display = 'none';
+    document.getElementById('reflectanceGraph').style.display = 'none';
+
+    const transmittance = result.transmittance.map(value => value * 100);
+
+
+
+// Create traces
+const traceT = {
+    x: result.wavelengths,
+    y: transmittance,
+    type: 'scatter',
+    mode: 'lines',
+    name: 'Transmittance',
+    line: { color: 'blue' }
+};
+
+Plotly.newPlot('transmittanceGraph', [traceT], {
+                        title: 'Transmittance vs Wavelength',
+                        xaxis: { title: 'Wavelength (nm)' },
+                        yaxis: { title: 'Transmittance (%)',
+                        range: [0,100]
+                     }
+                    });
+
+    document.getElementById('transmittanceGraph').style.display = 'block';
+}
+
+function showReflectance() {
+    console.log("Showing Reflectance Graph...");
+    document.getElementById('combinedGraph').style.display = 'none';
+    document.getElementById('transmittanceGraph').style.display = 'none';
+
+    const reflectance = result.reflectance.map(value => value * 100);
+
+    const traceR = {
+        x: result.wavelengths,
+        y: reflectance,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Reflectance',
+        line: { color: 'red' }
+    };
+
+    Plotly.newPlot('reflectanceGraph', [traceR], {
+        title: 'Reflectance vs Wavelength',
+        xaxis: { title: 'Wavelength (nm)' },
+        yaxis: { title: 'Reflectance (%)',
+                        range: [0,100]
+                     }
+    });
+
+    
+    document.getElementById('reflectanceGraph').style.display = 'block';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/get_user_designs')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data || !data.designs) {
+            console.error("Invalid API response:", data);
+            alert("Failed to fetch designs. Please try again later.");
+            return;
+        }
+
+        const designsContainer = document.getElementById('designsModalContent');
+        designsContainer.innerHTML = '';
+
+        data.designs.forEach(design => {
+            const designElement = document.createElement('div');
+            designElement.innerHTML = `
+                <h3>${design.name || "Unnamed Design"}</h3>
+                <p>Front Materials: ${(design.frontMaterials || []).join(', ')}</p>
+                <p>Back Materials: ${(design.backMaterials || []).join(', ')}</p>
+                <p>Glass Thickness: ${design.glassThickness || 'N/A'} nm</p>
+                <p>Start Wavelength: ${design.startWavelength || 'N/A'} nm</p>
+                <p>End Wavelength: ${design.endWavelength || 'N/A'} nm</p>
+            `;
+            designsContainer.appendChild(designElement);
+        });
+    })
+    .catch(error => {
+        console.error("Error fetching designs:", error);
+        alert('An error occurred while fetching designs. Please try again.');
+    });
+
+});
+
+document.getElementById('saveDesignForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const designName = document.getElementById('designName').value;
+    const visibility = document.querySelector('input[name="visibility"]:checked').value;
+
+    // Collect all design data
+    const frontLayers = getLayerData('frontLayers');
+    const backLayers = getLayerData('backLayers');
+    const glassThickness = parseFloat(document.getElementById('dgls').value);
+    const startWavelength = parseFloat(document.getElementById('start_wavelength').value);
+    const endWavelength = parseFloat(document.getElementById('end_wavelength').value);
+    const theta = parseFloat(document.getElementById('theta').value);
+    const incoh = parseFloat(document.getElementById('incoh').value);
+
+    const designData = {
+        name: designName,
+        visibility: visibility,
+        frontMaterials: frontLayers.materials,
+        frontThicknesses: frontLayers.thicknesses,
+        backMaterials: backLayers.materials,
+        backThicknesses: backLayers.thicknesses,
+        glassThickness: glassThickness,
+        startWavelength: startWavelength,
+        endWavelength: endWavelength,
+        theta: theta,
+        incoh: incoh
+    };
+
+    fetch('/save_design', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(designData),
+    })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert("Design saved successfully!");
+            } else {
+                alert("Error saving design: " + result.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while saving the design.');
+        });
+});
+
+function downloadDesignJSON() {
+    const designData = {
+        name: document.getElementById('filenameInput').value,
+        visibility: document.querySelector('input[name="visibility"]:checked').value,
+        frontMaterials: getLayerData('frontLayers').materials,
+        frontThicknesses: getLayerData('frontLayers').thicknesses,
+        backMaterials: getLayerData('backLayers').materials,
+        backThicknesses: getLayerData('backLayers').thicknesses,
+        glassThickness: parseFloat(document.getElementById('dgls').value),
+        startWavelength: parseFloat(document.getElementById('start_wavelength').value),
+        endWavelength: parseFloat(document.getElementById('end_wavelength').value),
+        theta: parseFloat(document.getElementById('theta').value),
+        incoh: parseFloat(document.getElementById('incoh').value),
+    };
+
+    const jsonString = JSON.stringify(designData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${designData.name || 'design'}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+    </script>
+</body>
+</html>

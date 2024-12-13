@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coating Tool - Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Background image styling */
+        body {
+            background-image: url('/static/images/IMG_4894.jpg'); /* Updated background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #F0F0F0;
+            font-family: 'Amiko', sans-serif;
+        }
+        .navbar {
+            background-color: #1B263B; /* Dark blue color */
+        }
+        .navbar a {
+            color: #F0F0F0;
+        }
+        /* Fix for hover inconsistency */
+    .navbar a.btn-primary:hover {
+        text-decoration: none; /* Prevent underline */
+        color: #1b263b; /* Ensure text is visible on hover */
+    }
+        .hero-section {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4rem;
+            border-radius: 1rem;
+            text-align: center;
+            color: #F0F0F0;
+        }
+        .btn-primary {
+        background: #0d0d0d; /* Grey button */
+        color: #f0e9e9;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s, color 0.3s; /* Added color transition */
+    }
+    .btn-primary:hover {
+        background: #e0e0e0; /* Light grey background */
+        color: #1b263b; /* Darker text color for visibility */
+    }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar text-white px-8 py-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="https://awi-three.vercel.app/AWILogo.svg" alt="AW Logo" class="h-8 w-auto"> <!-- Logo added here -->
+                <h1 class="text-2xl font-bold">AW SpectraCoat™ Studio</h1>
+            </div>
+            <ul class="flex space-x-6">
+                <li><a href="/login" class="hover:text-gray-300">Home</a></li>
+                <li><a href="/help" class="hover:text-gray-300">Help</a></li>
+            </ul>
+            <div>
+                <a href="/login" class="hover:text-gray-300">Log in</a>
+                <a href="/register" class="btn-primary shadow-lg">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section flex flex-col items-center justify-center">
+        <h1 class="text-5xl font-bold mb-6">Welcome to the AW SpectraCoat™ Studio</h1>
+        <p class="text-lg mb-10">Discover the Perfect Coating Design: Simulate, Analyze, and Innovate.</p>
+        <div class="flex space-x-6">
+            <!-- Login Button -->
+            <a href="/login" class="btn-primary shadow-lg">Login</a>
+            <!-- Register Button -->
+            <a href="/register" class="btn-primary shadow-lg">Register</a>
+        </div>
+    </div>
+</body>
+</html>

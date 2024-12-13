@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - AW SpectraCoat™ Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            color: #F0F0F0;
+            font-family: 'Amiko', sans-serif; 
+        }
+        .form-section {
+            flex: 1;
+            padding: 4rem;
+            background-color: #1B263B;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .image-section {
+            flex: 1;
+            background-image: url('/static/images/IMG_4980.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .design-parameters-title {
+            font-size: 2rem; /* Increased font size */
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #fffefe; /* Updated color */
+            font-weight: bold;
+        }
+        label {
+            color: #D1F2F2;
+        }
+        input {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            color: #000; /* Explicit black text color */
+            font-size: 1.1rem;
+        }
+        input::placeholder {
+            color: #333; /* Dark grey for placeholder text */
+        }
+        input:focus {
+            outline: none;
+            background: #FFF;
+            color: #000; /* Ensure text color remains black when focused */
+        }
+        .btn-primary {
+            background: #F0F0F0;
+            color: #1B263B;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .btn-primary:hover {
+            background: #E0E0E0;
+        }
+        .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .navbar a,
+        .navbar button {
+            color: #F0F0F0;
+            margin-left: 1rem;
+            margin-right: 1.5rem;
+            text-decoration: none;
+            vertical-align: middle;
+    font-size: 1.1rem;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        /* Dropdown Menu */
+.dropdown-menu {
+    display: none; /* Ensure it is hidden by default */
+    position: absolute;
+    top: 100%; /* Position below the button */
+    left: 0;
+    background-color: #333; /* Dark background for dropdown */
+    color: #fff; /* White text */
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Show dropdown menu on hover */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Ensure buttons in dropdown are styled properly */
+.dropdown-menu button {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+/* Change button background on hover */
+.dropdown-menu button:hover {
+    background-color: #555; /* Darker shade for hover */
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="flex space-x-4">
+            <a href="https://adaptivewaves.com/" target="_blank">
+                <img src="https://awi-three.vercel.app/AWILogo.svg" alt="AW Logo" class="h-8 w-auto">
+            </a>
+
+            <a href="/welcome">Home</a>
+            <!-- Load Dropdown -->
+            <div class="relative dropdown">
+                <button class="text-white">Load </button>
+                <div class="dropdown-menu">
+                    <button class="block px-4 py-2 hover:bg-gray-200" onclick="redirectToIndex('openDesign')">Open Design</button>
+                    <button class="block px-4 py-2 hover:bg-gray-200" onclick="document.getElementById('materialFileInput').click();">Load Material</button>
+                </div>
+            </div>
+
+            <a href="/public_designs">All Designs</a>
+            <a href="/help">Help</a>
+        </div>
+        <div class="flex space-x-4">
+            <span>Welcome, {{ first_name }}!</span>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Form Section -->
+    <div class="form-section">
+        <h1 class="design-parameters-title">COATING DESIGN PARAMETERS</h1>
+        <p class="mb-4">Please provide the following details to proceed with the simulation:</p>
+        <form action="/welcome" method="POST">
+            <div class="mb-4">
+                <label for="start_wavelength">Start Wavelength (nm):</label>
+                <input type="number" id="start_wavelength" name="start_wavelength" value="380" placeholder="380" required style="color: black;">
+            </div>
+            <div class="mb-4">
+                <label for="end_wavelength">End Wavelength (nm):</label>
+                <input type="number" id="end_wavelength" name="end_wavelength" value="1080" placeholder="1080" required style="color: black;">
+            </div>
+            <div class="mb-4">
+                <label for="glass_thickness">Glass Thickness (nm):</label>
+                <input type="number" id="glass_thickness" name="glass_thickness" value="320000" placeholder="320000" required style="color: black;">
+            </div>
+            <div class="mb-4">
+                <label for="theta">Theta (degrees):</label>
+                <input type="number" id="theta" name="theta" value="0" placeholder="0" required style="color: black;">
+            </div>
+            <div class="mb-4">
+                <label for="incoh">Incoherence:</label>
+                <input type="number" id="incoh" name="incoh" value="1000" placeholder="1000" required style="color: black;">
+            </div>
+            <button type="submit" class="btn-primary">Proceed to Stack Simulation</button>
+        </form>
+    </div>
+
+    <!-- Image Section -->
+    <div class="image-section"></div>
+
+      <!-- Hidden File Input for Load Material -->
+      <input type="file" id="materialFileInput" class="hidden" accept=".csv" onchange="uploadMaterial()" />
+
+      <script>
+          function redirectToIndex(action) {
+              const url = new URL(window.location.origin + '/');
+              url.searchParams.set('action', action);
+              window.location.href = url;
+          }
+      </script>
+</body>
+</html>

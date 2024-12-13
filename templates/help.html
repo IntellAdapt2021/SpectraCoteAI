@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - AW SpectraCoat™ Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1B263B; /* Dark Blue Background */
+            font-family: 'Amiko', sans-serif;
+            color: #F0F0F0;
+            padding: 0; /* Remove padding for full-width navbar */
+            margin: 0; /* Remove default margin */
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%; /* Ensure the body takes the full height */
+            box-sizing: border-box;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%; /* Ensure it spans the full width of the page */
+            padding: 0.5rem 1rem; /* Reduced padding for thinner navbar */
+            background: rgba(0, 0, 0, 0.7); /* Add transparency */
+            position: fixed;
+            top: 0;
+            left: 0; /* Ensure it starts from the left edge */
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+        }
+
+        .navbar img {
+            height: 30px; /* Adjust logo size */
+            width: auto;
+            margin-right: 1rem; /* Space between logo and links */
+        }
+
+        .navbar a {
+            color: #F0F0F0;
+            text-decoration: none;
+            margin-left: 1rem;
+            font-weight: bold;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .help-container {
+            background-color: #0A2540;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            max-width: 900px;
+            margin: 80px auto; /* Adjust margin for space below navbar */
+        }
+
+        h1, h2 {
+            color: #FF3B3F; /* Red Heading Color */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-blue {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .btn-blue:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-red {
+            background-color: #FF3B3F;
+            color: white;
+        }
+
+        .btn-red:hover {
+            background-color: #cc3232;
+        }
+
+        .icon {
+            margin-right: 8px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .graphic {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .graphic img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="https://adaptivewaves.com/" target="_blank">
+            <img src="https://awi-three.vercel.app/AWILogo.svg" alt="AW Logo">
+        </a>
+        <div>
+            <a href="/welcome">Home</a>
+            <a href="/load-design">Load Design</a>
+            <a href="/help">Help</a>
+        </div>
+        <div style="margin-left: auto;">
+            <span>Welcome, {{ first_name }}!</span>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Help Content -->
+    <div class="help-container mt-8">
+        <h1>Help - AWI Coating AI Tool</h1>
+
+        <!-- Overview -->
+        <section class="section">
+            <h2>About the AWI Coating AI Tool</h2>
+            <p>The AWI Coating AI Tool is designed to help you model and analyze optical coating designs with multiple layers. These layers control transmittance, reflectance, and absorbance to optimize your design.</p>
+        </section>
+
+        <!-- Steps to Create a New Design -->
+        <section class="section">
+            <h2>Steps to Create a New Design</h2>
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold" style="color: #FF3B3F;">Step 1: Explore Materials</h3>
+                <p>Check out the available materials or upload your own material in CSV format. The file should have three columns: wavelength, n, k.</p>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold" style="color: #FF3B3F;">Step 2: Set Up Environment</h3>
+                <p>Enter parameters like start and end wavelength and incoherence. Load existing designs if required.</p>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold" style="color: #FF3B3F;">Step 3: Build Your Design</h3>
+                <p>Add front or back layers, choose materials, and set thicknesses. Click <strong>Calculate</strong> to see results or <strong>Create Stack</strong> to visualize.</p>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold" style="color: #FF3B3F;">Step 4: Interactive Simulation</h3>
+                <p>Experiment with thickness changes and apply them to your design. Save your design as public or private.</p>
+            </div>
+        </section>
+
+        <!-- Redirect Buttons -->
+        <div class="text-center">
+            <button class="btn btn-blue" onclick="window.location.href='/public_designs'">
+                <svg class="icon inline-block w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-3-7h6v2H7v-2z" clip-rule="evenodd"></path>
+                </svg>
+                View All Designs
+            </button>
+            <a href="/static/Documentation.pdf" download="Documentation.pdf" class="btn btn-red">
+                <svg class="icon inline-block w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm2 5a1 1 0 011-1h4a1 1 0 010 2H8a1 1 0 01-1-1zm0 4a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                Download Documentation
+            </a>
+        </div>
+
+        <!-- Graphics -->
+        <section class="graphic">
+            <h2 style="color: #FF3B3F;">See the Tool in Action</h2>
+            <p>Explore the possibilities of optical coatings with a simple and interactive user interface.</p>
+            <img src="/static/images/help_graphic.png" alt="AWI Tool Graphic">
+        </section>
+    </div>
+</body>
+</html>

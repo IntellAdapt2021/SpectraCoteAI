@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Designs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            color: #F0F0F0;
+            background-color: #1B263B;
+            margin: 0;
+            font-family: 'Amiko', sans-serif;
+            padding: 0;
+            width: 100%; /* Ensure full-width content */
+            height: 100%; /* Ensure the body takes the full height of the viewport */
+            box-sizing: border-box; /* Include padding and borders in element's dimensions */
+        }
+
+       
+
+        .content-section {
+            flex: 1;
+            padding: 4rem;
+            background-color: #1B263B;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+       
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* Ensure it spans the full width of the page */
+    padding: 0.5rem 1rem; /* Reduced padding to make the navbar thinner */
+    background: rgba(0, 0, 0, 0.7); /* Add transparency */
+    position: fixed;
+    top: 0;
+    left: 0; /* Ensure it starts from the left edge */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+.navbar img {
+    height: 30px; /* Adjust logo size */
+    width: auto;
+    margin-right: 1rem; /* Space between logo and links */
+}
+
+.navbar a {
+    color: #F0F0F0;
+    text-decoration: none;
+    margin-left: 1rem;
+    font-weight: bold;
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+.navbar div {
+    display: flex;
+    align-items: center;
+}
+
+        .design-container {
+            margin-top: 20px;
+            background-color: #0A2540;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .design {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #000;
+        }
+        .design-name {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .design-name:hover {
+            color: #0056b3;
+        }
+        .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
+    text-align: left;
+    color: #1B263B; /* Dark text color for better contrast */
+}
+
+.popup h2 {
+    margin-top: 0;
+    color: #1B263B; /* Ensure header is dark */
+}
+
+.popup p {
+    color: #333; /* Darker text for better readability */
+}
+
+.close-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
+
+.close-btn:hover {
+    background-color: #c0392b;
+}
+
+.apply-btn {
+    background-color: #1B263B;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.apply-btn:hover {
+    background-color: #0A2540;
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="https://adaptivewaves.com/" target="_blank">
+            <img src="https://awi-three.vercel.app/AWILogo.svg" alt="AW Logo">
+        </a>
+        <div>
+            <a href="/welcome">Home</a>
+            <a href="/">New Design</a>
+        </div>
+        <div style="margin-left: auto; display: flex; align-items: center;">
+            <span style="margin-right: 1rem; white-space: nowrap;">Welcome, {{ first_name }}!</span>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+
+
+    <!-- Content Section -->
+    <div class="content-section">
+        <h1>Public Coating Designs</h1>
+        <div class="design-container" id="designContainer">
+            <!-- Public designs will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+<div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+        <button class="close-btn" id="closePopupBtn">Close</button>
+        <h2 id="popupTitle">Design Details</h2>
+        <div id="popupContent">
+            <!-- Design details will be loaded here -->
+        </div>
+        <!-- Apply Design Button -->
+        <button class="apply-btn" id="applyDesignBtn">Apply Design</button>
+    </div>
+</div>
+
+    </div>
+
+    <script>
+        async function fetchPublicDesigns() {
+    try {
+        const response = await fetch('/get_public_designs');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        console.log("Fetched Designs:", data); // Debugging log for fetched data
+
+        const container = document.getElementById('designContainer');
+        container.innerHTML = ''; // Clear any existing content
+
+        if (data.designs && data.designs.length > 0) {
+            data.designs.forEach(design => {
+                console.log("Design:", design); // Debugging log for each design
+
+                // Create a design card
+                const designDiv = document.createElement('div');
+                designDiv.className = 'design';
+
+                // Add design name (clickable)
+                const designName = document.createElement('p');
+                designName.className = 'design-name';
+                designName.textContent = design.name;
+                designName.onclick = () => openPopup(design);
+
+                // Add user email
+                const userEmail = document.createElement('p');
+                userEmail.textContent = `Saved by: ${design.user_email || 'Unknown User'}`; // Fallback if email is undefined
+
+                // Append elements to the design card
+                designDiv.appendChild(designName);
+                designDiv.appendChild(userEmail);
+
+                container.appendChild(designDiv);
+            });
+        } else {
+            container.innerHTML = '<p>No public designs available.</p>';
+        }
+    } catch (error) {
+        console.error("Error fetching public designs:", error);
+        const container = document.getElementById('designContainer');
+        container.innerHTML = `<p>Error fetching public designs. Please try again later.</p>`;
+    }
+}
+
+
+function openPopup(design) {
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupContent = document.getElementById('popupContent');
+    const applyDesignBtn = document.getElementById('applyDesignBtn');
+
+    // Set popup title and content
+    popupTitle.textContent = design.name;
+    popupContent.innerHTML = `
+        <p><strong>Saved by:</strong> ${design.user_email}</p>
+        <p><strong>Front Materials:</strong> ${design.details.frontMaterials.join(', ')}</p>
+        <p><strong>Front Thicknesses:</strong> ${design.details.frontThicknesses.join(', ')} nm</p>
+        <p><strong>Back Materials:</strong> ${design.details.backMaterials.join(', ')}</p>
+        <p><strong>Back Thicknesses:</strong> ${design.details.backThicknesses.join(', ')} nm</p>
+        <p><strong>Glass Thickness:</strong> ${design.details.glassThickness} nm</p>
+        <p><strong>Wavelength Range:</strong> ${design.details.startWavelength} nm - ${design.details.endWavelength} nm</p>
+        <p><strong>Theta:</strong> ${design.details.theta}</p>
+        <p><strong>Incoherence:</strong> ${design.details.incoh}</p>
+    `;
+
+    // Set Apply Design button action
+    applyDesignBtn.onclick = () => applyDesign(design);
+
+    // Show the popup
+    popupOverlay.style.display = 'flex';
+}
+
+function applyDesign(design) {
+    // Build the query string with design details
+    const params = new URLSearchParams({
+        name: design.name,
+        frontMaterials: design.details.frontMaterials.join('|'),
+        frontThicknesses: design.details.frontThicknesses.join(','),
+        backMaterials: design.details.backMaterials.join('|'),
+        backThicknesses: design.details.backThicknesses.join(','),
+        glassThickness: design.details.glassThickness,
+        startWavelength: design.details.startWavelength,
+        endWavelength: design.details.endWavelength,
+        theta: design.details.theta,
+        incoh: design.details.incoh,
+    });
+
+    // Redirect to index.html with the query string
+    window.location.href = `/?${params.toString()}`;
+}
+
+
+        // Function to close the popup
+        document.getElementById('closePopupBtn').addEventListener('click', () => {
+            document.getElementById('popupOverlay').style.display = 'none';
+        });
+
+        // Load public designs on page load
+        document.addEventListener('DOMContentLoaded', fetchPublicDesigns);
+    </script>
+</body>
+</html>

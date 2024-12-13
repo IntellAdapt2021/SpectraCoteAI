@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AW SpectraCoat Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1B263B, #0A2540); /* Gradient background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Amiko', sans-serif; /* Use Amiko font */
+
+        }
+
+        .heading-container {
+            text-align: center;
+            margin-top: 2rem; /* Space from the top */
+            margin-bottom: 2rem; /* Space before the login container */
+        }
+
+        .heading-container h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #D13438; /* Subtle Red Color */
+            text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+            margin: 0;
+        }
+
+        .heading-container p {
+            font-size: 1.2rem;
+            color: #F0F0F0; /* Light text for subheading */
+            margin: 0;
+            margin-top: 0.5rem;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .logo {
+            width: 200px;
+            height: auto;
+            margin: 0 auto 1.5rem;
+            display: block;
+        }
+
+        h2 {
+            color: #F0F0F0;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .input-login {
+            background: rgba(240, 240, 240, 0.9);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            
+            width: 100%;
+            height: 35px;
+            color: #333;
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .input-login:focus {
+            background: #fff;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: #444; /* Subtle dark button */
+            color: #fff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #666; /* Slightly lighter on hover */
+        }
+
+        .text-link {
+    color: #D1F2F2;
+    text-align: center;
+    display: block;
+    margin-top: 1rem;
+}
+
+.text-link:hover {
+    text-decoration: underline;
+}
+
+/* Additional styling for the Register link */
+.text-link:last-of-type {
+    margin-top: 0.5rem; /* Reduce margin to tighten spacing */
+    font-weight: bold;  /* Make it slightly more prominent */
+}
+
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal-content button[type="submit"] {
+    background: #444; /* Subtle dark button */
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem; /* Add some spacing */
+    transition: background 0.3s ease; /* Smooth hover effect */
+}
+
+        .modal-content button[type="submit"]:hover {
+    background: #666; /* Slightly lighter on hover */
+}
+        .modal-content h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .modal-content input {
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            background: #D13438;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Heading Section -->
+    <div class="heading-container">
+        <h1>AW SpectraCoat™ Studio</h1>
+        <p>Discover the Perfect Coating Design: Simulate, Analyze, and Innovate.</p>
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <img src="https://awi-three.vercel.app/AWILogo.svg" alt="AWI Logo" class="logo">
+    
+        <h2>Login</h2>
+    
+        <!-- Login Form -->
+        <form action="{{ url_for('login') }}" method="post">
+            <input type="email" name="email" class="input-login" placeholder="Enter your email" required>
+            <input type="password" name="password" class="input-login" placeholder="Enter your password" required>
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+    
+        <!-- Forgot Password and Register Links -->
+        <a href="#" class="text-link" id="forgotPasswordLink">Forgot Password?</a>
+        <a href="/register" class="text-link">Don't have an account? Register here</a>
+    </div>
+    
+
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-content">
+            <h3>Reset Password</h3>
+            <form action="/reset_password" method="POST">
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="password" name="new_password" placeholder="New Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <!-- Updated Reset Password Button -->
+                <button type="submit">Reset Password</button>
+            </form>
+            <!-- Close Button -->
+            <button class="close-btn" id="closeModal">Close</button>
+        </div>
+        
+    </div>
+
+    <script>
+        const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+        const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+        const closeModal = document.getElementById("closeModal");
+
+        // Open the modal
+        forgotPasswordLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            forgotPasswordModal.style.display = "flex";
+        });
+
+        // Close the modal
+        closeModal.addEventListener("click", () => {
+            forgotPasswordModal.style.display = "none";
+        });
+    </script>
+</body>
+</html>

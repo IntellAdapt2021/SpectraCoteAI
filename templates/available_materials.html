@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Materials</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Amiko', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #F0F0F0; /* Light color for text */
+    background: url('/static/images/lab_image.png') no-repeat center center fixed; /* Set the background image */
+    background-size: cover; /* Make the image cover the entire screen */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Add a semi-transparent black overlay for better contrast */
+    backdrop-filter: blur(3px); /* Apply a blur effect */
+    z-index: -1; /* Make sure this layer is behind all content */
+}
+        .navbar {
+            background-color: #000; /* Black navbar */
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-left, .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        .navbar a, .navbar button {
+            color: #fff;
+            text-decoration: none;
+            background-color: #444; /* Dark button color */
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .navbar a:hover, .navbar button:hover {
+            background-color: #666; /* Slightly lighter hover color */
+        }
+
+        /* Tooltip styling */
+        .navbar button:hover::after {
+            content: 'Upload only a comma separated CSV with three columns: wavelength, n, k';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .navbar button:hover::after {
+            opacity: 1;
+        }
+        #materials-container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1B263B; /* Ensure material container matches background */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+        }
+        .material-folder {
+            margin-bottom: 15px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .material-folder h3 {
+            background-color: #0A2540; /* Dark header for folders */
+            color: #F0F0F0;
+            padding: 10px;
+            margin: 0;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+        .material-files {
+            padding: 10px 20px;
+            display: none;
+        }
+        .material-file {
+            background-color: #F0F0F0; /* Light color for file rows */
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .material-file button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .material-file button:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8); /* Adjust opacity for contrast */
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    .modal-content {
+        background: #2E3B4E; /* Dark background for modal content */
+        width: 60%; /* Adjusted width for better visibility */
+        max-height: 80%;
+        overflow-y: auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        color: #ffffff; /* White text color for the header */
+    }
+    .modal-header h2 {
+        margin: 0;
+    }
+    .close-button {
+        background: #ff4d4d;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px 10px;
+    }
+    .close-button:hover {
+        background: #e60000;
+    }
+    pre {
+        background: #1B263B; /* Match the dark theme */
+        color: #ffffff; /* White text color for readability */
+        padding: 15px;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #333; /* Add a border for better visibility */
+    }
+
+    .heading {
+        text-align: center;
+        margin: 20px 0;
+        color: #4F74A5; /* Blue color that matches the webpage theme */
+        font-size: 2.5rem; /* Slightly larger font size */
+        font-weight: bold;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* Add shadow for better contrast */
+    }
+
+    .subheading {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #D1F2F2; /* Light color for better readability */
+        font-size: 1.2rem;
+    }
+
+    /* Blur background for heading */
+    .heading-container {
+        backdrop-filter: blur(10px); /* Blur background */
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+        padding: 20px;
+        border-radius: 10px; /* Rounded corners */
+        margin: 20px auto;
+        max-width: 80%; /* Adjusted width for a centered and compact look */
+    }
+
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <!-- Left section for Upload New Material -->
+        <div class="navbar-left">
+            <a href="https://adaptivewaves.com/" target="_blank">
+                <img src="https://adaptivewaves.com/wp-content/uploads/2024/03/aw-logo.svg" alt="AW Logo" style="width: 100px; height: auto;">
+            </a>
+    
+            <button onclick="document.getElementById('materialFileInput').click();">Upload Material</button>
+            <a href="/welcome">Set Up Environment</a>
+        </div>
+    
+        <!-- Right section for Help, Documentation, and Logout -->
+        <div class="navbar-right">
+            <span>Welcome, {{ first_name }}!</span>
+            <a href="/help" style="background-color: #444;">Help</a> <!-- Added Help Link -->
+            <a href="/static/Documentation.pdf" download="Documentation.pdf" style="background-color: #444;">Documentation</a> <!-- Added Documentation Link -->
+            
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    
+
+    <!-- New Heading and Subheading -->
+    <div class="heading">Available Materials in Dataset</div>
+    <div class="subheading">If you want to add your own material, please click "Upload Material"</div>
+
+
+    <div id="materials-container">
+        <!-- Dynamic content will be injected here -->
+    </div>
+
+    <input type="file" id="materialFileInput" name="file" accept=".csv" style="display:none;" onchange="uploadMaterial()">
+
+    <!-- Modal for Material Preview -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Material Preview</h2>
+                <button class="close-button" onclick="closeModal()">Close</button>
+            </div>
+            <pre id="modalBody"></pre>
+        </div>
+    </div>
+
+    <script>
+        async function fetchMaterials() {
+            const response = await fetch('/get_materials');
+            const materialsData = await response.json();
+
+            const container = document.getElementById('materials-container');
+            container.innerHTML = ''; // Clear any existing content
+
+            for (const [folder, files] of Object.entries(materialsData)) {
+                // Create folder section
+                const folderDiv = document.createElement('div');
+                folderDiv.className = 'material-folder';
+
+                const folderHeader = document.createElement('h3');
+                folderHeader.textContent = folder;
+                folderHeader.onclick = () => {
+                    const fileList = folderDiv.querySelector('.material-files');
+                    fileList.style.display = fileList.style.display === 'none' ? 'block' : 'none';
+                };
+
+                const fileList = document.createElement('div');
+                fileList.className = 'material-files';
+
+                // Add files to the folder
+                files.forEach(file => {
+                    const fileDiv = document.createElement('div');
+                    fileDiv.className = 'material-file';
+
+                    const fileName = document.createElement('span');
+                    fileName.textContent = file;
+
+                    const previewButton = document.createElement('button');
+                    previewButton.textContent = 'Preview';
+                    previewButton.onclick = () => previewMaterial(folder, file);
+
+                    fileDiv.appendChild(fileName);
+                    fileDiv.appendChild(previewButton);
+                    fileList.appendChild(fileDiv);
+                });
+
+                folderDiv.appendChild(folderHeader);
+                folderDiv.appendChild(fileList);
+                container.appendChild(folderDiv);
+            }
+        }
+
+        async function previewMaterial(folder, filename) {
+            try {
+                const response = await fetch(`/preview_material?folder=${folder}&material=${filename}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                const modal = document.getElementById('previewModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalBody = document.getElementById('modalBody');
+
+                if (data.preview) {
+                    modalTitle.textContent = `Preview of ${filename}`;
+                    modalBody.textContent = data.preview.join('\n');
+                    modal.style.display = 'flex';
+                } else {
+                    alert(`Error previewing material: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Error fetching material preview:', error);
+                alert('Failed to fetch material preview. Please try again.');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('previewModal');
+            modal.style.display = 'none';
+        }
+
+        async function uploadMaterial() {
+            const fileInput = document.getElementById('materialFileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/upload_material', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            if (result.message) {
+                alert(result.message);
+                await fetchMaterials();
+            } else {
+                alert(`Error uploading material: ${result.error}`);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchMaterials);
+    </script>
+</body>
+</html>

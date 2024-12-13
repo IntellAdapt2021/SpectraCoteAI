@@ -401,10 +401,15 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 @app.route('/calculate', methods=['POST'])
 def calculate():
     try:
-        # Log incoming request data
         print("Starting calculation with request data:")
         data = request.json
+        if not data:
+            return jsonify({"error": "No JSON data received"}), 400
+            
         print(f"Received data: {data}")
+        print(f"Data types: {type(data)}")
+        for key, value in data.items():
+            print(f"{key}: {type(value)} = {value}")
         start_wavelength = float(data.get('start_wavelength', 380))
         end_wavelength = float(data.get('end_wavelength', 1200))
         lam = np.linspace(start_wavelength, end_wavelength, 851)
@@ -486,7 +491,20 @@ def calculate():
         error_trace = traceback.format_exc()
         print(f"Error during calculation: {str(e)}")
         print(f"Traceback: {error_trace}")
-        return jsonify({"error": str(e), "traceback": error_trace}), 500
+        
+        # Check for specific error conditions
+        if "bragg1" not in data or "bragg2" not in data:
+            return jsonify({"error": "Missing Bragg stack data"}), 400
+        if "dgls" not in data:
+            return jsonify({"error": "Missing glass thickness"}), 400
+            
+        # Return detailed error for debugging
+        error_response = {
+            "error": str(e),
+            "traceback": error_trace,
+            "received_data": {k: str(v) for k, v in data.items()}
+        }
+        return jsonify(error_response), 500
 
 
 

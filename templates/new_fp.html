@@ -50,6 +50,49 @@
         background: #e0e0e0; /* Light grey background */
         color: #1b263b; /* Darker text color for visibility */
     }
+
+        .video-popup {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Hidden by default */
+            z-index: 1000;
+        }
+
+        .close-video {
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-top: 5px;
+        }
+
+        .close-video:hover {
+            background: #e60000;
+        }
+
+        .open-video {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 20px;
+            z-index: 1000;
+        }
+
+        .open-video:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 
@@ -83,5 +126,13 @@
             <a href="/register" class="btn-primary shadow-lg">Register</a>
         </div>
     </div>
-</body>
+
+        <!-- Video section -->
+        <div class="flex justify-center mt-8 mb-8">
+            <video width="480" height="320" controls>
+                <source src="/static/images/MyVideo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </body>
 </html>

@@ -80,18 +80,14 @@
         </div>
     
         <div class="mb-6">
-            <span class="block text-sm font-medium text-white mb-2">Visibility:</span>
-            <div class="flex items-center space-x-4">
-                <label class="flex items-center text-white">
-                    <input type="radio" name="visibility" value="public" class="mr-2" checked>
-                    Public
-                </label>
-                <label class="flex items-center text-white">
-                    <input type="radio" name="visibility" value="private" class="mr-2">
-                    Private
-                </label>
-            </div>
+            <label for="visibilityDropdown" class="block text-sm font-medium text-white mb-2">Visibility:</label>
+            <select id="visibilityDropdown" name="visibility" class="mt-1 block w-full rounded-md bg-white text-black shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+            </select>
         </div>
+
+
         
     
 
@@ -878,8 +874,8 @@ function createLayerInput(material = '', thickness = 100) {
                 <option value="">Select Material</option>
             </select>
             <input type="number" class="thickness-input w-[100px] rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value="${thickness}" step="0.01" placeholder="Thickness (nm)">
-            <button class="preview-layer px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Preview</button>
-            <button class="remove-layer px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Remove</button>
+            <button class="preview-layer px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Previewer</button>
+            <button class="remove-layer px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">X</button>
         </div>
     `;
 
